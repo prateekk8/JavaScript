@@ -1,0 +1,190 @@
+<!doctype html>
+<html>
+  <head>
+    <title> Reaction Timer </title>
+	<style type="text/css">
+	
+	 #shape {
+	   width:200px;
+	   height:200px;
+	   background-color:red;
+	   display:none;
+	   position:relative;
+	  
+	 }
+	 
+	 body {
+	 
+	  font-family:sans-serif;
+	 
+	 }
+	 
+	 #boldresult {
+	 
+	   font-weight:bold;
+	 
+	 }
+	 
+	 #bold {
+	   font-weight:bold;
+	 }
+	 
+	 #playAgain {
+	 
+	   
+	   position:absolute;
+	   top:-5px;
+	   left:1270px;
+	 }
+	  
+	</style>  
+  <head>
+  <body>
+  
+      <h1 id="heading"> Test Your Reactions! </h1>
+	  
+	  <p id = "info">Click on the boxes and circles as fast as you can..</p>
+    
+	  <p id="boldresult">Your Time: <span id="timeTaken"></span></p>
+	  
+	  <p id="bold">Your Average Time is : <span id = "mean"></span></p>
+	  
+	  <p id="bold">Best Time : <span id = "best"></span></p>
+  
+      <p id = "playAgain"><button onclick = "againPlay()"> Play Again </button></p>
+  
+      <div id="shape"> </div> 
+    
+ 
+	 
+	 <script type="text/javascript">
+	    var start = new Date().getTime()		
+		function getRandomColor() {
+           var letters = '0123456789ABCDEF';
+           var color = '#';
+           for (var i = 0; i < 6; i++) {
+           color += letters[Math.floor(Math.random() * 16)];
+           }
+		 return color;
+        }		 
+		
+	    function makeShapeAppear() {
+		
+		  var top = Math.random() * 400;
+		  
+		  var left = Math.random() * 900;
+		  
+		  var width = (Math.random() * 200) + 100;
+		  
+		  if (Math.random() > 0.5) {
+		  
+		   document.getElementById("shape").style.borderRadius = "50%";
+		   
+		  } else {
+		  
+		   document.getElementById("shape").style.borderRadius = "0";
+		   
+		  }
+		  
+		  document.getElementById("shape").style.backgroundColor = getRandomColor();
+		
+		  document.getElementById("shape").style.top = top + "px";
+		  
+		  document.getElementById("shape").style.left = left + "px";
+		  
+		  document.getElementById("shape").style.width = width + "px";
+		  
+		  document.getElementById("shape").style.height = width + "px";
+
+		
+		  document.getElementById("shape").style.display = "block"
+		  
+		  start = new Date().getTime()
+		 
+		}
+		
+		var delay = 0;
+		
+		function appearAfterDelay() {
+	       
+             delay = setTimeout(makeShapeAppear, Math.random() * 2000);
+        }
+		
+		var clicks = 0;
+		var sum=0;
+		var allTimes = new Array();
+		
+		 function whenShapeClicked() {
+	        document.getElementById("shape").onclick = function() {
+	           clicks+=1;
+	           console.log("clicks");
+               document.getElementById("shape").style.display = "none";
+	           var end = new Date().getTime();
+			   var timeTaken = (end - start) / 1000;
+	           allTimes.push(timeTaken);
+	           document.getElementById("timeTaken").innerHTML = timeTaken  + "s";
+			   console.log(allTimes);
+	           appearAfterDelay();
+			   stopTheGame();
+			   
+
+            }
+		 
+		     
+	     }
+		var avg = 0;
+		var min = 0;
+		function getSum(total, num) {
+		   return total + num;
+		}   
+		function stopTheGame() {
+		    
+		     if (clicks == 10) {
+			     clearTimeout(delay);
+				 alert("Game Over");
+				 sum = allTimes.reduce(getSum, 0);
+				 console.log(sum);
+				 avg = sum / allTimes.length;
+				 avg = avg.toFixed(3);
+				 console.log(avg);
+				 min = Math.min.apply(Math, allTimes);
+				 console.log(min);
+				 document.getElementById("heading").innerHTML = "Game is Over!!";
+				 document.getElementById("info").style.display = "none";
+				 document.getElementById("boldresult").style.display = "none";
+				 document.getElementById("mean").innerHTML = avg + " s";
+				 document.getElementById("best").innerHTML = min + "s";				 
+				 
+			 } else if (clicks > 10) {
+			     clearTimeout(delay);
+				 alert("Game is Over!");  
+			 } else {
+		          whenShapeClicked();
+		       }
+		}
+
+        function againPlay() {
+ 
+            document.getElementById("playAgain").onclick = function() {
+              location.reload();
+            }			
+ 
+        }		
+		
+	 
+	appearAfterDelay();
+	 stopTheGame();
+	 
+
+	 
+	 
+     
+	 
+	 
+		 
+	   
+    </script>
+  
+  </body>
+</html>  
+	  
